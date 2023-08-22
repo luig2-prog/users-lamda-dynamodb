@@ -1,4 +1,4 @@
-service: hola-mundo
+service: users-lamda-dynamodb
 
 provider:
   name: aws
@@ -8,10 +8,10 @@ plugins:
   - serverless-offline
 
 functions:
-  hello-world:
-    handler: handler.hello
+  get-users:
+    handler: handler.getUsers
     events:
       - http:
-          path: hello
+          path: users
           method: GET
 

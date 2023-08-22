@@ -1,22 +1,26 @@
+const aws = require('aws-sdk');
+const dynamodb = new aws.DocumentClient()
 
-const hello = async (event, context) => {
+const getUsers = async (event, context) => {
 
-    const date = new Date()
-
-    const time = `Fecha y hora actual en milisegundos es: ${date.getTime()} | Fecha y hora actual ${date}`
-
-    const response = {
-        message: 'Get Time',
-        data: time,
-        status: 200
+    const params = {
+        ExpressionAttributeValues: { ':pk': '1' },
+        keyConditionExpression: 'pk = :pk',
+        TableName: 'users',
     }
+    console.log("🚀 ~ file: handler.js:11 ~ getUsers ~ params:", params)
 
-    return {
-        "statusCode": 200,
-        "body": JSON.stringify(response)
-    }
+
+    return dynamodb.query(params, (res, erro) => {
+        console.log(res, erro)
+        return {
+            status: 200,
+            body: JSON.stringify({ users: res })
+        }
+    });
+
 }
 
-module.exports = {
-    hello
+export default {
+    getUsers
 }
