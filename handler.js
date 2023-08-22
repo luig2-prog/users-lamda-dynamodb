@@ -1,26 +1,31 @@
-const aws = require('aws-sdk');
-const dynamodb = new aws.DocumentClient()
+import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+
+const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
 
 const getUsers = async (event, context) => {
-
     const params = {
-        ExpressionAttributeValues: { ':pk': '1' },
-        keyConditionExpression: 'pk = :pk',
+        ExpressionAttributeValues: { ':pk': { S: '1' } },
+        KeyConditionExpression: 'pk = :pk',
         TableName: 'users',
-    }
-    console.log("🚀 ~ file: handler.js:11 ~ getUsers ~ params:", params)
+    };
 
+    try {
+        const command = new QueryCommand(params);
+        const response = await dynamodbClient.send(command);
 
-    return dynamodb.query(params, (res, erro) => {
-        console.log(res, erro)
         return {
-            status: 200,
-            body: JSON.stringify({ users: res })
-        }
-    });
-
-}
+            statusCode: 200,
+            body: JSON.stringify({ users: response.Items }),
+        };
+    } catch (error) {
+        console.error("Error:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "Internal Server Error" }),
+        };
+    }
+};
 
 export default {
     getUsers
-}
+};
