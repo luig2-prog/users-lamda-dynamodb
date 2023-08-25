@@ -1,9 +1,16 @@
 
-const hello = async (event, context) => {
+const getTime = async (_event, _context) => {
 
     const date = new Date()
 
-    const time = `Fecha y hora actual en milisegundos es: ${date.getTime()} | Fecha y hora actual ${date}`
+    const time = {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate(),
+        hour: date.getHours(),
+        minutes: date.getMinutes(),
+        seconds: date.getSeconds()
+    };
 
     const response = {
         message: 'Get Time',
@@ -18,5 +25,5 @@ const hello = async (event, context) => {
 }
 
 module.exports = {
-    hello
+    getTime
 }
