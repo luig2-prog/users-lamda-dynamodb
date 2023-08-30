@@ -1,24 +1,31 @@
-const { DynamoDBClient, QueryCommand } = require('@aws-sdk/client-dynamodb');
+const aws = require('aws-sdk');
 
-const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
+// Configure the AWS SDK to use DynamoDB Local
+aws.config.update({
+    region: 'localhost',
+    endpoint: 'http://localhost:8000',
+    accessKeyId: 'DEFAULT_ACCESS_KEY',  // These values are typically not needed for DynamoDB Local
+    secretAccessKey: 'DEFAULT_SECRET', // These values are typically not needed for DynamoDB Local
+});
+
+const dynamodb = new aws.DynamoDB.DocumentClient();
 
 const getUsers = async (event, context) => {
     const params = {
-        ExpressionAttributeValues: { ':pk': { S: '1' } },
+        ExpressionAttributeValues: { ':pk': '1' }, // No need for 'S' type for local DynamoDB
         KeyConditionExpression: 'pk = :pk',
-        TableName: 'users',
+        TableName: 'usersTable',
     };
 
     try {
-        const command = new QueryCommand(params);
-        const response = await dynamodbClient.send(command);
-
+        const result = await dynamodb.query(params).promise();
+        console.log(result);
         return {
             statusCode: 200,
-            body: JSON.stringify({ users: response.Items }),
+            body: JSON.stringify({ users: result }),
         };
     } catch (error) {
-        console.log("🚀 ~ file: handler.js:22 ~ getUsers ~ error:", error)
+        console.log("🚀 ~ file: handler.js:22 ~ getUsers ~ error:", error);
         return {
             statusCode: 500,
             body: JSON.stringify({ error: "Internal Server Error" }),
