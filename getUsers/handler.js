@@ -14,17 +14,13 @@ if (process.env.IS_OFFLINE) {
 
 const dynamodb = new aws.DynamoDB.DocumentClient(dynamoDBClientParams)
 
-const getUsers = async (event, context) => {
+const getUsers = async () => {
 
-    let userId = event.pathParameters.id
-
-    var params = {
-        ExpressionAttributeValues: { ':pk': userId },
-        KeyConditionExpression: 'pk = :pk',
+    const params = {
         TableName: 'usersTable'
     };
 
-    return dynamodb.query(params).promise().then(res => {
+    return dynamodb.scan(params).promise().then(res => {
         console.log(res)
         return {
             "statusCode": 200,
