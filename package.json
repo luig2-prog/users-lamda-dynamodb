@@ -4,22 +4,16 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "local": "serverless offline start",
-    "dynamo": "serverless dynamodb install",
-    "plugin": "serverless plugin install -n serverless-dynamodb-local",
-    "localsss": "serverless offline start"
+    "test": "echo \"Error: no test specified\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "serverless": "^3.34.0",
-    "serverless-dynamodb-local": "^0.2.40",
-    "serverless-offline": "^12.0.4"
+    "aws-sdk": "^2.1256.0",
+    "serverless": "^3.21.0",
+    "serverless-offline": "^11.3.0"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.398.0",
-    "aws-sdk": "^2.1445.0",
-    "serverless-dynamodb": "^0.2.43"
+    "serverless-dynamodb-local": "^0.2.40"
   }
 }
